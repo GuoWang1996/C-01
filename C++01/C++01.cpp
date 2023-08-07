@@ -33,7 +33,7 @@ struct MyStruct
 };
 int main()
 {
-	const char* filePath = "D:/阿里云下载/往日不再 官方中文 v1.07 综合MOD合集+完全通关存档 支持手柄 解压即玩/Days Gone v1.07/Days Gone v1.07/BendGame/Binaries/Win64/DaysGone.exe";  // 替换成你的可执行文件路径
+	const char* filePath = "E:/VS项目/C++01/Debug/C++01.exe";  // 替换成你的可执行文件路径
 
 	// 加载可执行文件
 	HMODULE module = LoadLibraryEx(filePath, nullptr, DONT_RESOLVE_DLL_REFERENCES);
