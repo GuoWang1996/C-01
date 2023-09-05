@@ -75,6 +75,29 @@ public:
 	************************************/
 	BOOL memoryProtect(LPVOID adress, DWORD size, DWORD  newFlAllocationType, DWORD*  oldFlAllocationType, BOOL bRe = FALSE);
 
+	/************************************
+	* 方法名:    allocMemory
+	* 描 述 : 分配内存
+	* 入 参 : DWORD size 分配大小
+	* 入 参 : BOOL bRe
+	* 返回值:   LPVOID
+	* 创建人: Simple
+	* 创建时间  : 2023年9月5日
+	************************************/
+	LPVOID allocMemory(DWORD size, BOOL bRe = FALSE);
+
+	/************************************
+	* 方法名:    freeMemory
+	* 描 述 : 释放内存
+	* 入 参 : LPVOID adress 释放内存地址指针
+	* 入 参 : DWORD size 释放内存大小
+	* 入 参 : BOOL bRe 
+	* 返回值:   BOOL
+	* 创建人: Simple
+	* 创建时间  : 2023年9月5日
+	************************************/
+	BOOL freeMemory(LPVOID adress, DWORD size, BOOL bRe = FALSE);
+
 };	
 
 

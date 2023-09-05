@@ -18,32 +18,45 @@ int main() {
 	HOOKW32 hook("DIRECT3DWINDOWCLASS", NULL);
 	if (hook.findProcess())
 	{
-		string input;
-		char buffer[200] = {0};
+		//申请内存
+		char* adress=(char*)hook.allocMemory(200);
+		if (!adress)
+		{
+			hook.logger.Log("分配内存失败");
+			return -1;
+		}
 		//1.读取内存处数据
-		hook.readMemory((LPVOID)ADRESS, buffer, 20, NULL);
+		char buffer[256] = { 0 };
+		hook.readMemory((LPVOID)adress, buffer, 20, NULL);
 		hook.logger.Log(buffer);
 		std::cout << "更改属性：";
 		DWORD old;
 
 		//2.更改内存保护属性
-		hook.memoryProtect((LPVOID)ADRESS, 256, PAGE_EXECUTE_READWRITE, &old);
+		hook.memoryProtect((LPVOID)adress, 256, PAGE_EXECUTE_READWRITE, &old);
 		std::cout << "请输入属性：";
 		char buffer2[256] = { 0 };
 		std::cin >> buffer2; // 将用户输入存储到input变量中
 		
 		//3.对内存写入
-		if (!hook.writeMemory((LPVOID)ADRESS, buffer2, strlen(buffer2), NULL))
+		if (!hook.writeMemory((LPVOID)adress, buffer2, strlen(buffer2), NULL))
 		{
 			hook.logger.Log("写入失败");
 		}
 
 		//4.还原内存属性
-		hook.memoryProtect((LPVOID)ADRESS, 256, PAGE_READONLY, &old);
+		hook.memoryProtect((LPVOID)adress, 256, PAGE_READONLY, &old);
 
 		//5.再次读取内存处数据
-		hook.readMemory((LPVOID)ADRESS, buffer2, 20, NULL);
+		hook.readMemory((LPVOID)adress, buffer2, 20, NULL);
 
+
+		//6.释放内存
+		if (hook.freeMemory(adress, 200))
+		{
+			hook.logger.Log("释放内存成功");
+
+		}
 	}
 	else {
 		hook.logger.Log("findProcess失败");

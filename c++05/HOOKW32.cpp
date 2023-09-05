@@ -92,3 +92,21 @@ BOOL HOOKW32::memoryProtect(LPVOID adress, DWORD size, DWORD newFlAllocationType
 	
 	return ::VirtualProtectEx(m_handle, adress, size, newFlAllocationType, oldFlAllocationType);
 }
+
+LPVOID HOOKW32::allocMemory(DWORD size, BOOL bRe /*= FALSE*/)
+{
+	if (bRe == FALSE || m_bInit == FALSE)
+	{
+		if (!findProcess())return FALSE;
+	}
+	return ::VirtualAllocEx(m_handle, NULL, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+}
+
+BOOL HOOKW32::freeMemory(LPVOID adress, DWORD size, BOOL bRe /*= FALSE*/)
+{
+	if (bRe == FALSE || m_bInit == FALSE)
+	{
+		if (!findProcess())return FALSE;
+	}
+	return ::VirtualFreeEx(m_handle, adress, size, MEM_DECOMMIT);
+}
