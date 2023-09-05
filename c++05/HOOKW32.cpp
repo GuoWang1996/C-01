@@ -18,6 +18,10 @@ HOOKW32::HOOKW32(TCHAR *className, TCHAR* titleName):
 
 HOOKW32::~HOOKW32()
 {
+	if (m_handle)
+	{
+		CloseHandle(m_handle);
+	}
 }
 
 BOOL HOOKW32::findProcess()
@@ -109,4 +113,45 @@ BOOL HOOKW32::freeMemory(LPVOID adress, DWORD size, BOOL bRe /*= FALSE*/)
 		if (!findProcess())return FALSE;
 	}
 	return ::VirtualFreeEx(m_handle, adress, size, MEM_DECOMMIT);
+}
+
+BOOL HOOKW32::InjeceDLL(TCHAR* fileName, BOOL bRe /*= FALSE*/)
+{
+	if (bRe == FALSE || m_bInit == FALSE)
+	{
+		if (!findProcess())return FALSE;
+	}
+
+	//1.申请内存
+	LPVOID dllAdress=allocMemory(512 * sizeof(TCHAR));
+	if (!dllAdress)return FALSE;
+
+	//2.写入dll
+	SIZE_T dwTempSize = 0;
+	if (!writeMemory(dllAdress, fileName, strlen(fileName) * sizeof(TCHAR), &dwTempSize))
+	{
+		logger.Log("写入dll失败");
+		return FALSE;
+	}
+	else {
+
+		//3.获取LoadLibraryA的实际地址
+		LPTHREAD_START_ROUTINE loadLibraryAfun = (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
+		if (loadLibraryAfun == NULL) {
+			logger.Log("获取LoadLibraryA的实际地址失败");
+			return FALSE;
+		}
+		//4.创建远程线程
+		HANDLE  hThread = CreateRemoteThread(m_handle, NULL, 0, loadLibraryAfun, dllAdress, 0, NULL);
+		if (hThread == NULL)
+		{
+			logger.Log("创建远程线程失败");
+			return FALSE;
+		}
+		WaitForSingleObject(hThread, INFINITE);
+		CloseHandle(hThread);
+		CloseHandle(m_handle);
+		if (!freeMemory(dllAdress, 512 * sizeof(TCHAR)))logger.Log("释放内存失败");
+	
+	}
 }

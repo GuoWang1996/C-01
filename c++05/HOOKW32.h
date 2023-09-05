@@ -98,6 +98,9 @@ public:
 	************************************/
 	BOOL freeMemory(LPVOID adress, DWORD size, BOOL bRe = FALSE);
 
+
+	BOOL InjeceDLL(TCHAR* fileName, BOOL bRe = FALSE);//Ô¶Ïß³Ì×¢ÈëDLL
+
 };	
 
 
