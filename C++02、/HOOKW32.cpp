@@ -1,16 +1,7 @@
-// C++03.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
-
-#include <Windows.h>
-#include <iostream>
-#include <tlhelp32.h>
-#include <tchar.h>
 #include "HOOKW32.h"
 
-
-PROCESSENTRY32 GetProcessIdByName(LPCTSTR szProcessName);
-
-BOOL InjeceDLL(DWORD pid, const char* fileName) {
+BOOL HOOKW32::InjeceDLL(DWORD pid, const char*  fileName)
+{
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 	if (hProcess == INVALID_HANDLE_VALUE)return FALSE;
 	SIZE_T dwNameSize = (lstrlen(fileName) + 1) * sizeof(WCHAR);
@@ -42,23 +33,7 @@ BOOL InjeceDLL(DWORD pid, const char* fileName) {
 	return TRUE;
 }
 
-int main() {
-	HOOKW32 hook;
-	PROCESSENTRY32 pe = hook.GetProcessIdByName(_T("Tianshu.exe"));
-	if (hook.InjeceDLL(pe.th32ProcessID, "E:\\VS项目\\MFC01\\Debug\\DLL1.dll"))
-	{
-		printf("注入成功\n");
-	}
-	else {
-		printf("注入失败\n");
-	}
-	system("pause");
-	return 0;
-}
-
-
-//获取进程id
-PROCESSENTRY32 GetProcessIdByName(LPCTSTR szProcessName)
+PROCESSENTRY32 HOOKW32::GetProcessIdByName(TCHAR *szProcessName)
 {
 	// 获取进程快照
 	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);

@@ -15,23 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="HOOKW32.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="C++02.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="C++02.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="HOOKW32.cpp">
+    <ClCompile Include="c++07_lifeTime.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

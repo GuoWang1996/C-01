@@ -99,6 +99,15 @@ public:
 	BOOL freeMemory(LPVOID adress, DWORD size, BOOL bRe = FALSE);
 
 
+	/************************************
+	* 方法名:    InjeceDLL
+	* 描 述 : 注入DLL
+	* 入 参 : TCHAR * fileName 注入文件名
+	* 入 参 : BOOL bRe
+	* 返回值:   BOOL
+	* 创建人: Simple
+	* 创建时间  : 2023年9月5日
+	************************************/
 	BOOL InjeceDLL(TCHAR* fileName, BOOL bRe = FALSE);//远线程注入DLL
 
 };	
